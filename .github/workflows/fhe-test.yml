@@ -22,12 +22,11 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -U pip wheel setuptools
-        pip install concrete-python
         pip install -r requirements.txt
-        pip install GEOparse pyaging
+        pip install GEOparse==2.0.4 pyaging==0.1.22
 
-        - name: Generate Horvath coefficients (Python)
-        run: |
+    - name: Generate Horvath coefficients (Python)
+      run: |
           python - << 'PYCODE'
           import pandas as pd
           from pyaging.models import Horvath2013
