@@ -1,4 +1,4 @@
-name: FHE BioAge Estimator Test
+name: FHE BioAge Estimator
 
 on:
   push:
@@ -17,18 +17,74 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
         python-version: '3.10' 
 
     - name: Install concrete-python separately
       run: |
         pip install -U pip wheel setuptools
         pip install concrete-python
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install GEOparse pyaging
 
-    # - name: Run FHE prediction test
+        - name: Generate Horvath coefficients (Python)
+        run: |
+          python - << 'PYCODE'
+          import pandas as pd
+          from pyaging.models import Horvath2013
+
+          clock = Horvath2013()
+          df = pd.DataFrame({
+              'probe': clock.feature_names,
+              'weight': clock.coef_
+          })
+          intercept = clock.intercept_
+          df = pd.concat([
+              df,
+              pd.DataFrame([{'probe':'intercept', 'weight':intercept}])
+          ], ignore_index=True)
+          df.to_csv('data/coeffs/horvath_coeffs.csv', index=False)
+          print('Horvath coefficients written:', df.shape)
+          PYCODE
+
+    - name: Generate DunedinPACE coefficients
+      run: |
+          python - << 'PYCODE'
+          from pyaging import clocks
+          import pandas as pd
+
+          weights = clocks.dunedin_pace_weights()
+          df = pd.DataFrame(list(weights.items()), columns=['probe','weight'])
+          df.to_csv('data/coeffs/dunedin_pace_coeffs.csv', index=False)
+          print('DunedinPACE coefficients written:', df.shape)
+          PYCODE
+
+    - name: Prepare methylation data
+      run: python prepare_data.py
+
+    # - name: Train / assign published weights
     #   run: |
-    #     python fhe_bio_age_estimator.py
+    #     python train.py \
+    #         --data data/sample_data.csv \
+    #         --horvath-coeffs data/coeffs/horvath_coeffs.csv \
+    #         --pace-coeffs data/coeffs/dunedin_pace_coeffs.csv \
+    #         --out-dir models/
+
+    # - name: Compile FHE models
+    #   run: python compile_fhe.py
+
+    # - name: Run encrypted inference smoke test
+    #   run: |
+    #     python - <<'PYCODE'
+    #     import pandas as pd
+    #     from concrete.ml.sklearn import EncryptedModel
+    #     df = pd.read_csv("data/sample_data.csv")
+    #     sample = df.iloc[0]
+    #     X_h = sample.filter(like="cg").values[:353].reshape(1,-1).astype(int)
+    #     age_model = EncryptedModel.load("fhe_models/horvath_fhe")
+    #     pred = age_model.predict(X_h, fhe="execute")
+    #     print("Encrypted inference OK:", pred)
+    #     PYCODE
