@@ -95,7 +95,7 @@ Try sample input from `data/bio_age_demo_data.csv`(5 methylation values, 0–1 s
 ## 5. Deployment
 
 - **Local demo:** See Usage above.
-- **Hugging Face Spaces:** [Instructions for it are "Coming soon"]
+- **Hugging Face Spaces:** (vamshi257/fhe-bio-age-estimator)[https://huggingface.co/spaces/vamshi257/fhe-bio-age-estimator/tree/main]
 
 ## 6. References
 
