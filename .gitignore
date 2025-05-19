@@ -1,0 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Data files (raw/large/intermediate)
+*.gz
+*.zip
+*.tar
+*.tar.gz
+*.h5
+*.hdf5
+*.csv
+*.tsv
+*.xlsx
+*.xls
+
+# Only keep final demo data; ignore large raw/intermediate files
+data/
+!data/bio_age_demo_data.csv
+
+# FHE artifacts (auto-generated)
+fhe_artifacts/
+!fhe_artifacts/README.md
+
+# Model binaries
+*.joblib
+*.pkl
+*.sav
+
+# Client/server keys (never commit secrets)
+client_keys/
+server_keys/
+
+# Logs and outputs
+*.log
+logs/
+flagged/
+deployment/
+.artifacts/
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE/project files
+.idea/
+.vscode/
+*.swp
+
+# Sample data
+sample_data/
+!sample_data/sample_input.csv
+
+# Ignore flagged and temp files
+flagged/
+*.tmp
+*.bak
