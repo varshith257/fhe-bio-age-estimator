@@ -39,6 +39,7 @@ If you prefer Docker or are on Windows, you can use the official Docker image:
 
 ```bash
 docker pull zamafhe/concrete-ml:latest
+```
 
 See [official Docker instructions](https://docs.zama.ai/concrete-ml/get-started/pip_installing) for more details.
 
@@ -59,14 +60,6 @@ python src/app/client.py
 ```
 
 Try sample input from `data/bio_age_demo_data.csv`(5 methylation values, 0–1 scale)
-
-## Submission Checklist
-- [x] Uses Zama Concrete ML for FHE
-- [x] Model runs on encrypted data
-- [x] Preprocessing on clear data, quantization for FHE
-- [x] Sample data and demo included
-- [x] Hugging Face Spaces ready
-- [x] Report and code well documented
 
 ## FHE Biological Age Estimation Report
 
